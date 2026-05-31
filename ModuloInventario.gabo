@@ -1,0 +1,166 @@
+
+Algoritmo inventario
+
+Inicio
+
+/*
+Modulo: inventario
+Desarrollador: Eisvel Noguera. 
+supervisor: Rafael Garcia.
+*/
+
+var CapacidadRefresco = 1000, CapacidadMaiz = 1000, invRefresco, repRefresco, invMaiz, repMaiz : Real;
+var capChoco0 = 100, capMani = 100, capDorito = 100, capCheesetris = 100, capTeque = 100, capNuggets = 100, capFlips = 100, capChocosavoy = 100, capGomitas = 100, capNutella = 100 : Entero;
+Var invChoco0,invMani,invDorito,invCheesetris,invTeque,invNuggets,invFlips,invGomitas,invNutella: Entero
+var repChoco0,repMani,repCheesetris,repTeque,repNuggets,invFlips,invGomitas,invNutella: Entero
+var generarReporte, regresar: Entero;
+var clave, password, volver = 1 : Entero;
+
+password =  87654321;
+
+    Mostrar << "POR FAVOR INGRESE SU CLAVE";
+    Leer >> clave;
+    
+    Mientras (clave <> password or salir <> 0 ) Hacer;
+        Mostrar << "CLAVE INCORRECTA, DESEA CONTINUAR ";
+        Mostrar << "PRESIONE (1) CONTINUAR | (0) PARA SALIR";
+        leer  salir;
+        Mientras (salir < 0 or salir > 1) Hacer;
+            Mostrar << " POR FAVOR INGRESE UNA OPCION VALIDA";
+        Fin_Mientras
+    // eisvel aqui va un repetir
+    Fin_Mientras
+
+
+    Repetir // Esto se repite tantas veces como necesiten sacar la reposicion de invetnario
+        Mostrar << "¿Desea generar e imprimir la SOLICITUD DE REPOSICIÓN DE STOCK?";
+        Mostrar << "1 - Sí | 0 - No";
+        Leer >> generarReporte;
+        Mientras (generarReporte < 0 Or generarReporte > 1) Hacer; // Se valida que el numero este dentro del rango establecido, si el numero esta fuera del rango no sale de aqui
+            Mostrar << "Opción inválida. Intente de nuevo.";
+            Leer >> generarReporte;
+        Fin_Mientras
+
+        Si (generarReporte = 1) Entonces; // Se chequea si generarReporte = 1 significa que si quiere imprimir el reporte
+            Si (invRefresco < CapacidadRefresco) Entonces;
+                Si (invRefresco = 0 ) Entonces; // en cada si entonces, se chequea el inventario del refresco, para saber que cantidad que se va a solicitar
+                    repRefresco = CapacidadRefresco;
+                Sino
+                    repRefresco = CapacidadRefresco - invRefresco;
+                Fin_Si
+            Fin_Si
+
+            Si (invMaiz < CapacidadMaiz) Entonces; // se chequea lo mismo en la capacidad de maiz y en todos los demas
+                Si (invMaiz = 0 ) Entonces;
+                    repMaiz = CapacidadMaiz;
+                Sino
+                    repMaiz = CapacidadMaiz - invMaiz;
+                Fin_Si
+            Fin_Si
+
+            Si (invChoco0 < capChoco0) Entonces;
+                Si (invChoco0 = 0 ) Entonces;
+                    repChoco0 = capChoco0;
+                Sino
+                    repChoco0 = capChoco0 - invChoco0;
+                Fin_Si
+            Fin_Si
+
+            Si (invMani < capMani) Entonces;
+                Si (invMani = 0 ) Entonces;
+                    repMani = capMani;
+                Sino
+                    repMani = capMani - invMani;
+                Fin_Si
+            Fin_Si
+
+            Si (invDorito < capDorito) Entonces;
+                Si (invDorito = 0 ) Entonces;
+                    repDorito = capDorito;
+                Sino
+                    repDorito = capDorito - invDorito;
+                Fin_Si
+            Fin_Si
+
+            Si (invCheesetris < capCheesetris) Entonces;
+                Si (invCheesetris = 0) Entonces;
+                    repCheesetris = capCheesetris;
+                Sino
+                    repCheesetris = capCheesetris - invCheesetris;
+                Fin_Si
+            Fin_Si
+
+            Si (invTeque < capTeque) Entonces;
+                Si (invTeque = 0) Entonces;
+                    repTeque = capTeque;
+                Sino
+                    repTeque = capTeque - invTeque;
+                Fin_Si
+            Fin_Si
+
+            Si (invNuggets < capNuggets) Entonces;
+                Si (invNuggets = 0) Entonces;
+                    repNuggets = capNuggets;
+                Sino
+                    repNuggets = capNuggets - invNuggets;
+                Fin_Si
+            Fin_Si
+
+            Si (invFlips < capFlips) Entonces;
+                Si (invFlips = 0) Entonces;
+                    repFlips = capFlips;
+                Sino
+                    repFlips = capFlips - invFlips;
+                Fin_Si
+            Fin_Si
+
+            Si (invChocosavoy < capChocosavoy) Entonces;
+                Si (invChocosavoy = 0) Entonces;
+                    repChocosavoy = capChocosavoy;
+                Sino
+                    repChocosavoy = capChocosavoy - invChocosavoy;
+                Fin_Si
+            Fin_Si
+
+            Si (invGomitas < capGomitas) Entonces;
+                Si (invGomitas = 0) Entonces;
+                    repGomitas = capGomitas;
+                Sino
+                    repGomitas = capGomitas - invGomitas;
+                Fin_Si
+            Fin_Si
+
+            Si (invNutella < capNutella) Entonces;
+                Si (invNutella = 0) Entonces;
+                    repNutella = capNutella;
+                Sino
+                    repNutella = capNutella - invNutella;
+                Fin_Si
+            Fin_Si
+            //aqui se muestra por pantalla la solicitud de lo que se necesita para llegar al tope del inventario
+            Mostrar << " ---- SOLICITUD DE REPOSICION DE INVENTARIO ---- ";
+            Mostrar << "Stock Refresco",invRefresco,"|Reposicion Refresco:",repRefresco;
+            Mostrar << "Stock Maiz",invMaiz,"|Reposicion Maiz:",repMaiz;
+            Mostrar << "Stock Chocolate 0 azucar",invChoco0,"|Reposicion Chocolate 0 azucar:",repChoco0;
+            Mostrar << "Stock Mani",invMani,"|Reposicion Mani:",repMani;
+            Mostrar << "Stock Dorito",invDorito,"|Reposicion Dorito:",repDorito;
+            Mostrar << "Stock Cheesetris",invCheesetris,"|Reposicion Cheesetris:",repCheesetris;
+            Mostrar << "Stock Tequeños",invTeque,"|Reposicion Tequeños:",repTeque;
+            Mostrar << "Stock Nuggets",invNuggets,"|Reposicion Nuggets:",repNuggets;
+            Mostrar << "Stock Flips",invFlips,"|Reposicion Flips:",repFlips;
+            Mostrar << "Stock Chocolate Savoy",invChocosavoy,"|Reposicion Choco Savoy:",repChocosavoy;
+            Mostrar << "Stock Gomitas Trululu",invGomitas,"|Reposicion Gomitas Trululu:",repGomitas;
+            Mostrar << "Stock Nutella",invNutella,"|Reposicion Nutella :",repNutella;
+
+        Fin_Si
+        // Se verifica si el usuario desea regresar 
+        Mostrar << "¿Deseas regresar al menú anterior?";
+        Mostrar << "1 - Sí | 0 - No";
+        Leer >> regresar;
+        Mientras (regresar < 0 Or regresar > 1) Hacer; // aqui se valida que el numero este dentro de rango
+            Mostrar << "Opción inválida. Intente de nuevo.";
+            Leer >> regresar;
+        Fin_Mientras
+        Hasta (regresar=0)
+    Fin_Repetir
+Fin

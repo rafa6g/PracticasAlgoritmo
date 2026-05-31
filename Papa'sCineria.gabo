@@ -1,0 +1,1154 @@
+Algoritmo PapasCineria
+Inicio
+    
+    /*
+    ------------------------
+    DECLARACIÓN DE VARIABLES
+    ------------------------
+    */
+    // [MÓDULO DE CLIENTES]
+    // 1. DATOS DEL CLIENTE Y ACOMPAÑANTES:
+    Var nombre: Cadena;
+    Var cedula, edad, nTickets, personAcomp, edadMenor: Entero;
+    // 2. DATOS POR FUNCIÓN DIARIA:
+    Var asientosF1, asientosF2, asientosF3, asientosF4, asientosF5, asientosF6, asientosFX: Entero;
+    Var funcElegida, edadNecesaria: Entero;
+    // 3. COMBOS Y PRODUCTOS INDIVIDUALES:
+    Var gastoRefresco, gastoMaiz: Real;
+    Var combo, cantCombo, comprarCombo, producto, cantProducto, comprarProducto: Entero;
+    Var noDisponible: Booleano;
+    // 4. PRECIOS Y TOTALES:
+    Var precioTickets, pTotalTickets, precioCombo, pTotalCombos, precioProducto, pTotalProductos, totalGeneral: Real;
+    // 5. RECAUDACIÓN SEMANAL:
+    Var recauTickets, recauCombos, recauProductos, recauTSemana: Real;
+    // 6. APERTURA Y CIERRE DE MÓDULOS:
+    Var nuevaCompra, ejecutado: Entero;
+    
+    // [MÓDULO GERENCIA]
+    // 1. ACCESO:
+    Var llaveGerencia = "321ger": Cadena;
+
+    // [MÓDULO INVENTARIO]
+    // 1. ACCESO:
+    Var llaveInventario = "654inv": Cadena;
+    // 2. CAPACIDAD MÁXIMA:
+    Var CapacidadRefresco = 1000000, CapacidadMaiz = 1000000,  : Real;
+    Var capChoco0 = 300, capMani = 300, capDorito = 300: Entero;
+    Var capCheesetris = 300 capTeque = 300, capNuggets = 300, capFlips = 300: Entero;
+    Var capChocosavoy = 300, capGomitas = 300, capNutella = 300: Entero;
+    // 3. EN STOCK:
+    Var invRefresco, invMaiz: Real;
+    Var invChoco0, invMani, invDoritos, invCheesetris, invTequenos: Entero;
+    Var invNuggets, invFlips, invTrululu, invNutella: Entero;
+    // 4. POR REPONER:
+    Var repRefresco, repMaiz: Real;
+    Var repChoco0, repMani, repDorito, repCheesetris, repTeque: Entero;
+    Var repNuggets, repFlips, repGomitas, repNutella: Entero;
+    // 5. 
+
+    // [MÓDULO NÓMINA]
+    // 1. ACCESO:
+    Var llaveNomina = "987nom": Cadena;
+    
+    // [SIN MÓDULO]
+    Var trabajo, generarReporte, volver: Entero;
+    Var clave: Cadena;
+
+    /*
+    ---------------------------
+    INICIALIZACIÓN DE VARIABLES
+    ---------------------------
+    */
+    // [MÓDULO DE CLIENTES]
+
+    // 1. DATOS POR FUNCIÓN.
+    asientosF1, asientosF2, asientosF3, asientosF4, asientosF5, asientosF6 = 30;
+    
+    // 4. PRECIOS Y TOTALES:
+    precioTickets = 4;
+
+    // 5. RECAUDACIÓN SEMANAL:
+    recauTickets, recauCombos, recauProductos = 0;
+
+    // 6. APERTURA Y CIERRE DE MÓDULO:
+    nuevaCompra = 1;
+    ejecutado = 0;
+
+    
+    
+    Repetir
+        Mostrar << "Seleccione una opción:";
+        Mostrar << "1 - Cliente | 2 - Empleado | 9 - Salir";
+        Leer >> opMenuP;
+
+        // Se descartan opciones inválidas.
+        Mientras (opMenuP <> 1 And opMenuP <> 2 And opMenuP <> 9) Hacer;
+            Mostrar << "Opción Inválida. Intente de nuevo:";
+            Leer >> opMenuP;
+        Fin_Mientras
+
+        Si (opMenuP=1) Entonces;
+            // ----------------------------------
+            // OPCIÓN MENU PRINCIPAL: 1) CLIENTE.
+            // ----------------------------------
+
+            Repetir // INICIA: MÓDULO CLIENTES
+                
+                // Se inicializan los montos subtotales y el total en 0
+                // para no heredar los montos a pagar del cliente anterior.
+                pTotalCombos, pTotalTickets, pTotalProductos, totalGeneral = 0; 
+                
+                Mostrar << "Bienvenido(a) a PAPA'S CINERIA";
+
+                // --------------------
+                // 1. COMPRA DE TICKETS
+                // --------------------
+
+                // Se recogen los datos del cliente que compra los tickets.
+                Repetir 
+                    Mostrar << "Por favor, a continuación ingrese sus datos.";
+                    Mostrar << "Nombre y apellido:";
+                    Leer >> nombre;
+                    Mostrar << "Cédula:";
+                    Leer >> cedula;
+                    Mostrar << "Edad:";
+                    Leer >> edad;
+
+                    // DATO INVÁLIDO:
+                    // No existen personas con 0 años o que tenga años en negativo.
+                    // Además, es extremadamente improbable que una persona llegue a tener más de 120 años.
+                    Mientras (edad<1 Or Edad > 120) Hacer;
+                        Mostrar << "Por favor ingrese una edad valida";
+                        Leer >> edad;
+                    Fin_Mientras
+
+                    // ALERTA DE SEGURIDAD:
+                    // Una persona menor a 13 años no puede comprar tickets por políticas de la empresa.
+                    Si (edad < 13) Entonces;
+                        Mostrar << "No puede comprar sin supervisión parental.";
+                    Fin_Si
+                Hasta (edad >= 13);
+                Fin_Repetir
+                // Salimos del bucle solo si la edad del cliente es 13 o mayor.
+
+                // El cliente selecciona una función del menú.
+                Mostrar << "¿Qué pelicula desea ver?";
+                Mostrar << "A continuacion las peliculas y sus respectivas funciones:";
+
+                Mostrar << "1. Lunes: Avengers: Papasday. (Todo público)";
+                Mostrar << "2. Martes: El Exorcismo del Papa’s. (+13 años)";
+                Mostrar << "3. Miércoles: 007: El Papa’s nunca muere. (+18 años)";
+                Mostrar << "4. Jueves: Papa’s Kombat II. (+18 años)";
+                Mostrar << "5. Viernes: El Papa’s viste a la moda 2. (+13 años)";
+                Mostrar << "6. Sábado: Super Papa’s Galaxy. (Todo público)";
+                Mostrar << "7. Domingo: Sin funciones programadas";
+                
+                // Entramos en el bucle que se encarga de validar que el grupo que acompaña al cliente,
+                // cumpla con el requisito de edad de la función seleccionada. Si no, deben seleccionar otra función.
+                Repetir
+                    
+                    // Este otro se encarga de validar que hayan asientos disponibles para la función seleccionada,
+                    // o se haya seleccionado un día en que haya función, donde el día Domingo es la excepción.
+                    // Si no hay asientos disponibles para dicha función, se le pide que seleccione otra función.
+                    Repetir
+                        Leer >> funcElegida;
+
+                        // Cuidamos que el día de la semana elegido no sea inválido.
+                        Mientras (funcElegida<1 Or funcElegida>7) Hacer;
+                            Mostrar << "Opción inválida. Intente de nuevo.";
+                            Leer >> funcElegida;
+                        Fin_Mientras
+
+                        // El día elegido ya es válido, así que revisamos cuál de los 7 eligió.
+                        // La variable asientosFX, se comportará como la cantidad
+                        // de asientos disponibles para la función elegida por este usuario,
+                        // por eso recibe el valor de la variable asientosF1 para el caso 1,
+                        // y así sucesivamente con los demás hasta el 6.
+                        // Además, se definirá la edad necesaria para entrar a la función elegida.
+                        En_Caso (funcElegida>=1 and funcElegida<=7) Sea;
+                            Caso(funcElegida=1);
+                                Si (asientosF1>0) Entonces;
+                                    asientosFX = asientosF1;
+                                    edadNecesaria = 0;
+                                Fin_Si
+
+                            Caso(funcElegida=2);
+                                Si (asientosF2>0) Entonces;
+                                    asientosFX = asientosF2;
+                                    edadNecesaria = 13;
+                                Fin_Si
+
+                            Caso(funcElegida=3);
+                                Si (asientosF3>0) Entonces;
+                                    asientosFX = asientosF3;
+                                    edadNecesaria = 18;
+                                Fin_Si
+
+                            Caso(funcElegida=4);
+                                Si (asientosF4>0) Entonces;
+                                    asientosFX = asientosF4;
+                                    edadNecesaria = 18;
+                                Fin_Si
+
+                            Caso(funcElegida=5);
+                                Si (asientosF5>0) Entonces;
+                                    asientosFX = asientosF5;
+                                    edadNecesaria = 13;
+                                Fin_Si
+
+                            Caso(funcElegida=6);
+                                Si (asientosF6>0) Entonces;
+                                    asientosFX = asientosF6;
+                                    edadNecesaria = 0;
+                                Fin_Si
+                            Otro_Caso
+                                // El día 7 es un dato válido, por eso lo tomamos en cuenta,
+                                // pero no hay funciones ese día.
+                                Mostrar << "No hay funciones los domingos. Elija otra función.";
+                        Fin_Caso
+                        
+                        // Si no hay asientos disponibles y la función no es el domingo.
+                        Si (asientosFX = 0 And funcElegida <> 7) Entonces;
+                            Mostrar << "Ya no quedan asientos disponibles, por favor elija otra función.";
+                        Fin_Si
+                        
+                    // Podemos salir de este REPETIR solo si hay asientos disponibles y no se seleccionó el domingo.
+                    Hasta (asientosFX > 0 And funcElegida <> 7);
+                    Fin_Repetir
+
+                    Mostrar << "Quedan:", asientosFX, " asientos disponibles.";
+                    Mostrar << "Elija la cantidad de tickets a pagar.";
+                    Mostrar << "Costo por ticket: 4$";
+                    Leer >> nTickets;
+                    
+                    // Comprobamos que la cantidad de tickets sea positiva y
+                    // que hayan suficientes asientos disponibles para la cantidad de tickets
+                    // que quiere comprar el cliente.
+                    Mientras (nTickets <= 0 Or nTickets > asientosFX) Hacer;
+                        Si (nTickets <=0) Entonces;
+                            Mostrar << "Elija una cantidad válida.";
+                        Sino
+                            Mostrar << "No hay suficientes asientos.";
+                            Mostrar << "Por favor ingrese otra cantidad:";
+                        Fin_Si
+                        Leer >> nTickets;
+                    Fin_Mientras
+                    
+                    // Verificamos que todos los que acompañan al cliente (incluido el cliente)
+                    // cumplan con la edad requerida para ver la pelicula, 
+                    // por eso preguntamos la edad de cada uno de ellos.
+                    Para (personAcomp = 1 Hasta personAcomp = nTickets) Hacer;
+                        // Vamos persona por persona.
+                        Si (personAcomp = 1) Entonces;
+                            // Si personAcomp = 1, estamos hablando del cliente que
+                            // está haciendo la compra, al cual ya le pedimos la edad antes,
+                            // y por eso la utilizamos directamente.
+                            edadActual = edad;
+                        Sino
+                            // Estos son los acompañantes.
+                            Mostrar << "Ingrese la edad del acompañante n° ", personAcomp, ": ";
+                            Leer << edadActual;
+                            Mientras (edadActual < 1 Or edadActual > 120) Hacer;
+                                Mostrar << "Por favor ingrese una edad valida";
+                                Leer << edadActual;
+                            Fin_Mientras
+                        Fin_Si
+
+                        // Se lleva registro de quien tiene la menor edad en este grupo de personas.
+                        Si (edadActual < edadMenor) Entonces;
+                            edadMenor = edadActual;
+                        Fin_Si
+                    Fin_Para
+                    
+                    // Se muestra el mensaje si no cumplen con el requisito de edad.
+                    Si (edadMenor < edadNecesaria) Entonces;
+                        Mostrar << "No se cumple con la edad requerida. Seleccione otra función.";
+                    Fin_Si
+                // Solo se sale de este REPETIR si el cliente y su grupo cumplen con la edad necesaria.
+                Hasta (edadMenor >= edadNecesaria);
+                Fin_Repetir
+
+                
+                
+                
+                En_Caso (funcElegida >=1 And funcElegida <=6) Sea;
+                    Caso (funcElegida = 1);
+                        // Restamos los asientos ya vendidos para llevar cuenta de la disponibilidad real.
+                        asientosF1 = asientosFX - nTickets;
+                        // Acumulamos los tickets vendidos de la función.
+                        tikeLunes = tikeLunes + nTickets;
+                        // Actualizamos la recaudación de la función.
+                        recaLunes = tikeLunes * precioTickets;
+                    Caso (funcElegida = 2);
+                        asientosF2 = asientosFX - nTickets;
+                        tikeMartes = tikeMartes + nTickets;
+                        recaMartes = tikeMartes * precioTickets;
+                    Caso (funcElegida = 3);
+                        asientosF3 = asientosFX - nTickets;
+                        tikeMiercoles = tikeMiercoles + nTickets;
+                        recaMiercoles = tikeMiercoles * precioTickets;
+                    Caso (funcElegida = 4);
+                        asientosF4 = asientosFX - nTickets;
+                        tikeJueves = tikeJueves + nTickets;
+                        recaJueves = tikeJueves * precioTickets;
+                    Caso (funcElegida = 5);
+                        asientosF5 = asientosFX - nTickets;
+                        tikeViernes = tikeViernes + nTickets;
+                        recaViernes = tikeViernes * precioTickets;
+                    Otro_Caso
+                        asientosF6 = asientosFX - nTickets;
+                        tikeSabado = tikeSabado + nTickets;
+                        recaSabado = tikeSabado * precioTickets;
+                Fin_Caso
+                
+                // Se calcula el total a pagar por la cantidad de tickets comprados
+                // por el cliente actual.
+                pTotalTickets = nTickets * precioTickets;
+
+                // Se acumula la recaudación semanal de la venta de tickets.
+                recauTickets = recauTickets + pTotalTickets;
+                
+                // -------------------
+                // SELECCIÓN DE COMBOS
+                // -------------------
+
+                Mostrar << "¿Desea comprar un combo?";
+                Mostrar << "1=Si  0=No";
+                Leer >> comprarCombo;
+
+                // Descartamos datos inválidos.
+                Mientras (comprarCombo<0 Or comprarCombo>1) Hacer;
+                    Mostrar << "Opción inválida. Intente de nuevo.";
+                    Leer >> comprarCombo;
+                Fin_Mientras
+
+                // Si eligió Sí, se le muestra el menú de combos.
+                Mientras (comprarCombo=1) Hacer;
+                    Mostrar << "Seleccione un combo de la lista:";
+                    Mostrar << "1. Combo Infantil: 1 Cotufa mediana + 1 Refresco pequeño (475 ml) - 5 $";
+                    Mostrar << "2. Combo Individual: 1 Cotufa grande + 1 Refresco grande (950 ml) - 7,50 $";
+                    Mostrar << "3. Combo Pareja: 2 Cotufas grandes + 2 Refrescos grandes (950 ml) - 13,5 $";
+                    Mostrar << "4. Combo Familiar: 2 Cotufas extra grandes + 4 Refrescos medianos (650 ml) - 22 $";
+                    Leer >> combo;
+                    
+                    // Descartamos datos inválidos.
+                    Mientras (combo<1 Or combo>4) Hacer;
+                        Mostrar << "Opción inválida. Intente de nuevo.";
+                        Leer >> combo;
+                    Fin_Mientras
+
+                    En_Caso (combo>=1 And combo<=4) Sea;
+                        Caso(combo=1);
+                            Mostrar << "Usted eligió Combo Infantil.";
+                            // Según el combo elegido, se le asigna su respectivo precio
+                            // para más adelante poder operar con él.
+                            precioCombo = 5;
+                            // Además se obtiene su gasto en inventario,
+                            // tanto en refresco como en maiz.
+                            gastoRefresco = 475; // mililitros
+                            gastoMaiz = 200; // gramos
+                        Caso(combo=2);
+                            Mostrar << "Usted eligió Combo Individual";
+                            precioCombo = 7.5;
+                            gastoRefresco = 950;
+                            gastoMaiz = 400;
+                        Caso(combo=3);
+                            Mostrar << "Usted eligió Combo Pareja";
+                            precioCombo = 13.5;
+                            gastoRefresco = 950 * 2;
+                            gastoMaiz = 400 * 2;
+                        Otro_Caso
+                            Mostrar << "Usted eligió Combo Familiar";           
+                            precioCombo = 22;
+                            gastoRefresco = 650 * 4;
+                            gastoMaiz = 800 * 2;
+                    Fin_Caso
+                            
+                    Mostrar << "Ingrese la cantidad que desea pedir:";
+                    Leer >> cantCombo;
+                    
+                    // El cliente puede pedir cero combos si quiere,
+                    // pero no se puede pedir una cantidad negativa de combos.
+                    Mientras (cantCombo<0) Hacer;
+                        Mostrar << "Cantidad inválida. Intente de nuevo.";
+                        Leer >> cantCombo;
+                    Fin_Mientras
+                    
+                    noDisponible = 0;
+                    // Comprobamos si hay en stock.
+                    En_Caso (combo >= 1 And combo <= 4) Sea;
+                        Caso (combo = 1);
+                            // Si la cantidad de maiz que se va a gastar para preparar la cantidad pedida
+                            // del combo seleccionado, supera la cantidad de maiz que nos queda en el inventario,
+                            // no podemos preparar el combo. Lo mismo sucede para el refresco.
+                            Si (cantCombo * gastoMaiz > invMaiz And cantCombo * gastoRefresco > invRefresco) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantCombo," Combo(s) Infantil(es) a su compra.";
+                                // Acumulamos la cantidad vendida del combo seleccionado.
+                                cantInfantil = cantInfantil + cantCombo;
+                                // Y aprovechamos a actualizar cuanto dinero se ha recaudado con este combo.
+                                recaInfantil = cantInfantil * precioCombo;
+                                // Además, restamos en el inventario lo que se utilizó.
+                                invMaiz = invMaiz - gastoMaiz;
+                                invRefresco = invRefresco - gastoRefresco;
+                            Fin_Si
+                        Caso (combo = 2);
+                            Si (cantCombo * gastoMaiz > invMaiz And cantCombo * gastoRefresco > invRefresco) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantCombo," Combo(s) Individual(es) a su compra.";
+                                cantIndividual = cantIndividual + cantCombo;
+                                recaIndividual = cantIndividual * precioCombo;
+                                invMaiz = invMaiz - gastoMaiz;
+                                invRefresco = invRefresco - gastoRefresco;
+                            Fin_Si
+                        Caso (combo = 3);
+                            Si (cantCombo * gastoMaiz > invMaiz And cantCombo * gastoRefresco > invRefresco) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantCombo," Combo(s) Pareja a su compra.";
+                                cantPareja = cantPareja + cantCombo;
+                                recaPareja = cantPareja * precioCombo;
+                                invMaiz = invMaiz - gastoMaiz;
+                                invRefresco = invRefresco - gastoRefresco;
+                            Fin_Si
+                        Otro_Caso
+                            Si (cantCombo * gastoMaiz > invMaiz And cantCombo * gastoRefresco > invRefresco) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantCombo," Combo(s) Familiar(es) a su compra.";
+                                cantFamiliar = cantFamiliar + cantCombo;
+                                recaFamiliar = cantFamiliar * precioCombo;
+                                invMaiz = invMaiz - gastoMaiz;
+                                invRefresco = invRefresco - gastoRefresco;
+                            Fin_Si
+                    Fin_Caso
+
+                    Si (noDisponible = 1) Entonces;
+                        Mostrar << "La cantidad disponible no es suficiente para satisfacer su pedido.";
+                        cantCombo = 0;
+                        // Esto va a provocar que el cálculo de pTotalCombos resulte en 0$.
+                    Fin_Si
+
+                    // El precio total que el usuario va a pagar por todos los combos que pidió.
+                    pTotalCombos = pTotalCombos + (cantCombo * precioCombo);
+
+
+                    Mostrar << "¿Desea otro combo?";
+                    Mostrar << "1 - Sí | 0 - No";
+                    Leer >> comprarCombo;
+
+                    // Descartamos datos inválidos.
+                    Mientras (comprarCombo<0 And comprarCombo>1) Hacer;
+                        Mostrar << "Opción inválida. Intente de nuevo.";
+                        Leer >> comprarCombo;
+                    Fin_Mientras
+                // Solo salimos del MIENTRAS si el cliente ya no quiere más combos.
+                Fin_Mientras
+                
+                // Se acumula la recaudación semanal que genera la venta de combos.
+                recauCombos = recauCombos + pTotalCombos;
+
+                // -----------------------------------
+                // SELECCIÓN DE PRODUCTOS INDIVIDUALES
+                // -----------------------------------
+
+                Mostrar << "¿Desea añadir otro producto a su compra?";
+                Mostrar << "1 - Sí | 0 - No";
+                Leer >> comprarProducto;
+                
+                // Descartamos datos inválidos.
+                Mientras (comprarProducto<0 Or comprarProducto>1) Hacer;
+                    Mostrar << "Opción inválida. Intente de nuevo.";
+                    Leer >> comprarProducto;
+                Fin_Mientras
+                
+                // Reiniciamos esta variable por si acaso.
+                noDisponible = 0;
+                Mientras (comprarProducto=1) Hacer;
+                    Mostrar << "Seleccione un producto de la lista:";
+                    Mostrar << "1. Cotufa mediana 3,5$";
+                    Mostrar << "2. Cotufa grande = 5$";
+                    Mostrar << "3. Cotufa extra grande = 7,5$";
+                    Mostrar << "4. Refresco pequeño (475 ml) = 2,5 $";
+                    Mostrar << "5. Refrescos medianos (650 ml) = 3,5$";
+                    Mostrar << "6. Refrescos grandes (950 ml) = 4$";
+                    Mostrar << "7. Maní 2$";
+                    Mostrar << "8. Doritos 3$";
+                    Mostrar << "9. Cheese Tris 3$";
+                    Mostrar << "10. Ración de tequeños 5$";
+                    Mostrar << "11. Ración de nuggets 5$";
+                    Mostrar << "12. Flips grande 5$";
+                    Mostrar << "13. Chocolate Savoy 2,5$";
+                    Mostrar << "14. Gomitas Trululu 2$";
+                    Mostrar << "15. Chocolate 0 Azúcar 3$";
+                    Mostrar << "16. Nutella 10$";
+                    Leer >> producto;
+
+                    // Descartamos datos inválidos.
+                    Mientras (producto<1 or producto>16) Hacer;
+                        Mostrar << "Opción inválida. Intente de nuevo.";
+                        Leer >> producto;
+                    Fin_Mientras
+
+                    // Mostramos la opción escogida y obtenemos el precio del producto elegido
+                    // para operar con él más adelante.
+                    En_Caso (producto>=1 and producto<=16) Sea;
+                        Caso(producto=1);
+                            precioProducto = 3.5;
+                            gastoMaiz = 200; // gramos
+                            Mostrar << "Usted eligió Cotufa Mediana.";
+                        Caso(producto=2);
+                            precioProducto = 5;
+                            gastoMaiz = 400;
+                            Mostrar << "Usted eligió Cotufa Grande";
+                        Caso(producto=3);
+                            precioProducto = 7.5;
+                            gastoMaiz = 800;
+                            Mostrar << "Usted eligió Cotufa Extra Grande";
+                        Caso(producto=4);
+                            precioProducto = 2.5;
+                            gastoRefresco = 475;
+                            Mostrar << "Usted eligió Refresco Pequeño";
+                        Caso(producto=5);
+                            precioProducto = 3.5;
+                            gastoRefresco = 650;
+                            Mostrar << "Usted eligió Refresco Mediano";
+                        Caso(producto=6);
+                            precioProducto = 4;
+                            gastoRefresco = 950;
+                            Mostrar << "Usted eligió Refresco Grande";
+                        Caso(producto=7);
+                            precioProducto = 2;
+                            Mostrar << "Usted eligió Maní";
+                        Caso(producto=8);
+                            precioProducto = 3;
+                            Mostrar << "Usted eligió Doritos";
+                        Caso(producto=9);
+                            precioProducto = 3;
+                            Mostrar << "Usted eligió Cheese Tris";
+                        Caso(producto=10);
+                            precioProducto = 5;
+                            Mostrar << "Usted eligió Ración de Tequeños";
+                        Caso(producto=11);
+                            precioProducto = 5;
+                            Mostrar << "Usted eligió Ración de Nuggets";
+                        Caso(producto=12);
+                            precioProducto = 5;
+                            Mostrar << "Usted eligió Flips Grande";
+                        Caso(producto=13);
+                            precioProducto = 2.5;
+                            Mostrar << "Usted eligió Chocolate Savoy";
+                        Caso(producto=14);
+                            precioProducto = 2;
+                            Mostrar << "Usted eligió Gomitas Trululu";
+                        Caso(producto=15);
+                            precioProducto = 3;
+                            Mostrar << "Usted eligió Chocolate 0 Azúcar";
+                        Otro_Caso
+                            precioProducto = 10;
+                            Mostrar << "Usted eligió Nutella";                                              
+                    Fin_Caso
+
+                    // Preguntamos a ver cuantos del producto individual que escogió
+                    // va a comprar.
+                    Mostrar << "Ingrese la cantidad que desea pedir:";
+                    Leer >> cantProducto;
+                    Mientras (cantProducto<0) Hacer;
+                        Mostrar << "Cantidad inválida. Intente de nuevo.";
+                        Leer >> cantProducto;
+                    Fin_Mientras
+                    
+                    En_Caso (producto>=1 and producto<=16) Sea;
+                        Caso (producto = 1);
+                            // Acá aplica lo mismo que lo de los combos.
+                            // No podemos sacar del inventario más de lo que queda.
+                            Si (cantProducto * gastoMaiz > invMaiz) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Cotufa(s) Mediana(s) a su compra.";
+                                // Acumulamos la cantidad vendida del producto seleccionado.
+                                cantCotufaM = cantCotufaM + cantProducto;
+                                // Y aprovechamos a actualizar cuanto dinero se ha recaudado con este producto.
+                                recaCotufaM = cantCotufaM * precioProducto;
+                                // Además, restamos en el inventario lo que se utilizó.
+                                invMaiz = invMaiz - gastoMaiz;
+                            Fin_Si
+                        Caso (producto = 2);
+                            Si (cantProducto * gastoMaiz > invMaiz) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Cotufa(s) Grande(s) a su compra.";
+                                cantCotufaL = cantCotufaL + cantProducto;
+                                recaCotufaL = cantCotufaL * precioProducto;
+                                invMaiz = invMaiz - gastoMaiz;
+                            Fin_Si
+                        Caso (producto = 3);
+                            Si (cantProducto * gastoMaiz > invMaiz) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Cotufa(s) Extra Grande(s) a su compra.";
+                                cantCotufaXL = cantCotufaXL + cantProducto;
+                                recaCotufaXL = cantCotufaXL * precioProducto;
+                                invMaiz = invMaiz - gastoMaiz;
+                            Fin_Si
+                        Caso (producto = 4);
+                            Si (cantProducto * gastoRefresco > invRefresco) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Refresco(s) Pequeño(s) a su compra.";
+                                cantRefrescoP = cantRefrescoP + cantProducto;
+                                recaRefrescoP = cantRefrescoP * precioProducto;
+                                invRefresco = invRefresco - gastoRefresco;
+                            Fin_Si
+                        Caso (producto = 5);
+                            Si (cantProducto * gastoRefresco > invRefresco) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Refresco(s) Mediano(s) a su compra.";
+                                cantRefrescoM = cantRefrescoM + cantProducto;
+                                recaRefrescoM = cantRefrescoM * precioProducto;
+                                invRefresco = invRefresco - gastoRefresco;
+                            Fin_Si
+                        Caso (producto = 6);
+                            Si (cantProducto * gastoRefresco > invRefresco) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Refresco(s) Grande(s) a su compra.";
+                                cantRefrescoG = cantRefrescoG + cantProducto;
+                                recaRefrescoG = cantRefrescoG * precioProducto;
+                                invRefresco = invRefresco - gastoRefresco;
+                            Fin_Si
+                        Caso (producto = 7); // Mani
+                            // Las unidades se comparan directo, sin hacer multiplicaciones.
+                            // No se pueden sacar más unidades de las que hay en el inventario.
+                            Si (cantProducto > invMani) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Maní(s) a su compra.";
+                                cantMani = cantMani + cantProducto;
+                                recaMani = cantMani * precioProducto;
+                                invMani = invMani - cantProducto;
+                            Fin_Si
+                        Caso (producto = 8); // Doritos
+                            Si (cantProducto > invDoritos) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Doritos a su compra.";
+                                cantDoritos = cantDoritos + cantProducto;
+                                recaDoritos = cantDoritos * precioProducto;
+                                invDoritos = invDoritos - cantProducto;
+                            Fin_Si
+                        Caso (producto = 9); // Cheese Tris
+                            Si (cantProducto > invCheesetris) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Cheese Tris a su compra.";
+                                cantCheesetris = cantCheesetris + cantProducto;
+                                recaCheesetris = cantCheesetris * precioProducto;
+                                invCheesetris = invCheesetris - cantProducto;
+                            Fin_Si
+                        Caso (producto = 10); // Tequeños
+                             Si (cantProducto > invTequenos) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Ración(es) de Tequeño(s) a su compra.";
+                                cantTequenos = cantTequenos + cantProducto;
+                                recaTequenos = cantTequenos * precioProducto;
+                                invTequenos = invTequenos - cantProducto;
+                            Fin_Si
+                        Caso (producto = 11); // Nuggets
+                            Si (cantProducto > invNuggets) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Ración(es) de Tequeño(s) a su compra.";
+                                cantNuggets = cantNuggets + cantProducto;
+                                recaNuggets = cantNuggets * precioProducto;
+                                invNuggets = invNuggets - cantProducto;                                
+                            Fin_Si
+                        Caso (producto = 12); // Flips
+                            Si (cantProducto > invFlips) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Flips Grande(s) a su compra.";
+                                cantFlips = cantFlips + cantProducto;
+                                recaFlips = cantFlips * precioProducto;
+                                invFlips = invFlips - cantProducto;
+                            Fin_Si
+                        Caso (producto = 13); // Chocolate Savoy
+                            Si (cantProducto > invChocoSavoy) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Chocolate(s) Savoy a su compra.";
+                                cantChocoSavoy = cantChocoSavoy + cantProducto;
+                                recaChocoSavoy = cantChocoSavoy * precioProducto;
+                                invChocoSavoy = invChocoSavoy - cantProducto;
+                            Fin_Si
+                        Caso (producto = 14); // Trululu
+                            Si (cantProducto > invTrululu) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Gomita(s) Trululu a su compra.";
+                                cantTrululu = cantTrululu + cantProducto;
+                                recaTrululu = cantTrululu * precioProducto;
+                                invTrululu = invTrululu - cantProducto;
+                            Fin_Si
+                        Caso (producto = 15); // Chocolate 0% Azucar
+                            Si (cantProducto > invChoco0) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Chocolate(s) 0 Azúcar a su compra.";
+                                cantChoco0 = cantChoco0 + cantProducto;
+                                recaChoco0 = cantChoco0 * precioProducto;
+                                invChoco0 = invChoco0 - cantProducto;
+                            Fin_Si
+                        Otro_Caso // Nutella
+                            Si (cantProducto > invNutella) Entonces;
+                                noDisponible = 1;
+                            Sino
+                                Mostrar << "Se ha añadido la cantidad de ", cantProducto," Nutella(s) a su compra.";
+                                cantNutella = cantNutella + cantProducto;
+                                recaNutella = cantNutella * precioProducto;
+                                invNutella = invNutella - cantProducto;
+                            Fin_Si
+                    Fin_Caso
+                    
+                    Si (noDisponible = 1) Entonces;
+                        Mostrar << "La cantidad disponible no es suficiente para satisfacer su pedido.";
+                        cantProducto = 0;
+                        // Esto va a provocar que el cálculo de pTotalProductos resulte en 0$.
+                    Fin_Si
+
+                    // Calculamos el monto total a pagar de productos individuales
+                    pTotalProductos = pTotalProductos + (cantProducto * precioProducto);
+
+                    Mostrar << "¿Desea comprar más productos?";
+                    Mostrar << "1 - Sí | 0 - No";
+                    Leer >> comprarProducto;
+                
+                    Mientras (comprarProducto<0 Or comprarProducto>1) Hacer;
+                        Mostrar << "Opción inválida. Intente de nuevo.";
+                        Leer >> comprarProducto;
+                    Fin_Mientras
+                Fin_Mientras
+                
+                // Se acumula la recaudación semanal que genera la venta de productos individuales.
+                recauProductos = recauProductos + pTotalProductos;
+
+                // --------------------------------
+                // IMPRESIÓN DE FACTURA DEL CLIENTE
+                // --------------------------------
+
+                // Calculamos el total a pagar del cliente actual y mostramos la factura.
+                totalGeneral = pTotalTickets + pTotalCombos + pTotalProductos;
+
+                Mostrar << "----FACTURA----";
+                Mostrar << "Nombre: ", nombre;
+                Mostrar << "Cedula: ", cedula;
+                Mostrar << "Edad: ", edad," años";
+                Mostrar << "Cant. Entradas: ", nTickets;
+                Mostrar << "TOTALES--------";
+                Mostrar << "Monto Entradas: ", pTotalTickets, "$";
+                Mostrar << "Monto Combos: ", pTotalCombos, "$";
+                Mostrar << "Monto Productos: ", pTotalProductos, "$";
+                Mostrar << "TOTAL GENERAL: ", totalGeneral, "$";
+                Mostrar << "---------------";
+
+                // Comprobamos si un nuevo cliente va a realizar una nueva compra,
+                // para poder repetir o salir del MÓDULO CLIENTE.
+                Mostrar << "Seleccione una opción:";
+                Mostrar << "1 - Nueva compra | 0 - Volver al menú principal";
+                Leer >> nuevaCompra;
+
+                // Validamos que la opción elegida sea correcta.
+                Mientras (nuevaCompra<0 Or nuevaCompra>1) Hacer; 
+                    Mostrar << "Opción inválida. Intente de nuevo.";
+                    Leer >> nuevaCompra;
+                Fin_Mientras
+                
+                // Antes de repetir o salir del MÓDULO CLIENTE, totalizamos la recaudación,
+                // la cual se sobreescribe con cada cliente que hace todo su proceso de compra exitosamente.
+                recauTSemana = recauTickets + recauCombos + recauProductos;
+                
+                // Una bandera que indica que ejecutamos al menos una compra exitosa.
+                Si (totalGeneral > 0) Entonces;
+                    ejecucion = 1;
+                Fin_Si
+            Hasta (nuevaCompra = 0);
+            Fin_Repetir
+        Sino
+            Si (opMenuP = 2) Entonces;
+                // -----------------------------------
+                // OPCIÓN MENU PRINCIPAL: 2) EMPLEADO.
+                // -----------------------------------
+                Repetir
+                    Mostrar << "[SOLUCIÓN EMPRESARIAL PAPA'S CINERÍA]";
+                    Mostrar << "Seleccione el módulo de trabajo de su departamento:";
+                    Mostrar << "1 - Gerencia | 2 - Inventario | 3 - Nómina | 9 - Retroceder";
+                    Leer >> opModulo;
+                    
+                    Mientras (opModulo <> 1 And opModulo <> 2 And opModulo <> 3 And opModulo <> 9) Entonces;
+                        Mostrar << "Opción Inválida. Intente de nuevo:";
+                        Leer >> opModulo;
+                    Fin_Mientras
+
+                    Si (opModulo = 1) Entonces;
+                        // -----------------
+                        //  MÓDULO GERENCIA
+                        // -----------------
+                        Repetir 
+                            Mostrar << "[MÓDULO GERENCIA]";
+                            Mostrar << "Ingrese la contraseña de acceso:";
+                            Leer >> clave;
+
+                            Mientras (clave <> llaveGerencia And intentar <> 0 ) Hacer;
+                                Mostrar << "Contraseña Incorrecta. ¿Desea intentarlo nuevamente?";
+                                Mostrar << "1 - Intentar de nuevo | 0 - Volver al menú anterior";
+                                Leer >> intentar;
+                                // Descartamos una opción inválida.
+                                Mientras (intentar < 0 Or intentar > 1) Hacer;
+                                    Mostrar << "Opción inválida. Intente de nuevo.";
+                                    Leer >> intentar;
+                                Fin_Mientras
+
+                                // Si el trabajador quiere intentar de nuevo, se muestra esto.
+                                Si (intentar = 1) Entonces;
+                                    Mostrar << "Ingrese la contraseña de acceso:";
+                                    Leer >> clave;
+                                Sino
+                                    volver = 0;
+                                Fin_Si
+                            Fin_Mientras
+
+                            Si (clave = llaveGerencia) Entonces;
+                                Mostrar << "CONTRASEÑA CORRECTA. CARGANDO MÓDULO...";
+                                Mostrar << "---------------------------------------";
+                                
+                                Repetir
+                                    Mostrar << "¿Desea imprimir el REPORTE DE VENTAS y realizar el CIERRE DE CAJA?";
+                                    Mostrar << "1 - Sí | 0 - No";
+                                    
+                                    //Aqui se valida que este dentro del rango.
+                                    Mientras (generarReporte < 0 Or generarReporte > 1) Hacer; 
+                                        Mostrar << "Opción inválida. Intente de nuevo.";
+                                        Leer >> generarReporte;
+                                    Fin_Mientras
+
+                                    // Se genera el reporte si generarReporte = 1
+                                    Si (generarReporte = 1) Entonces;
+                                        
+                                        Mostrar << " ----REPORTE DE VENTAS---- ";  
+
+                                        Mostrar << " 1. TICKETS";
+                                        Mostrar << " LUNES: ", tikeLunes, " | RECAUDACIÓN: ",recaLunes, "$";
+                                        Mostrar << " MARTES: ", tikeMartes, " | RECAUDACIÓN: ",recaMartes, "$";
+                                        Mostrar << " MIERCOLES: ", tikeMiercoles, " | RECAUDACIÓN: ",recaMiercoles, "$";
+                                        Mostrar << " JUEVES: ", tikeJueves, " | RECAUDACIÓN: ",recaJueves, "$";
+                                        Mostrar << " VIERNES: ", tikeViernes, " | RECAUDACIÓN: ",recaViernes, "$";
+                                        Mostrar << " SABADO: ", tikeSabado, " | RECAUDACIÓN: ",recaSabado, "$";
+
+
+                                        Mostrar << " 2. COMBOS"; 
+                                        Mostrar << " INFANTIL: ", cantInfantil, " | RECAUDACIÓN: ",recaInfantil, "$";
+                                        Mostrar << " INDIVIDUAL: ", cantIndividual, " | RECAUDACIÓN: ", recaIndividual, "$";
+                                        Mostrar << " PAREJA: ", cantPareja, " | RECAUDACIÓN: ", recaPareja, "$";
+                                        Mostrar << " FAMILIAR: ", cantFamiliar, " | RECAUDACIÓN: ", recaFamiliar, "$";
+
+
+                                        Mostrar << " 3. INDIVIDUALES SALADO: ";
+                                        Mostrar << " COTUFA MEDIANA: ", cantCotufaM, " | RECAUDACIÓN: ", recaCotufaM, "$";
+                                        Mostrar << " COTUFA GRANDE: ", cantCotufaL, " | RECAUDACIÓN: ", recaCotufaL, "$";
+                                        Mostrar << " COTUFA EXTRA GRANDE: ", cantCotufaXL, " | RECAUDACIÓN: ", recaCotufaXL, "$";
+                                        Mostrar << " CHEESE TRIS: ", cantCheesetris, " | RECAUDACIÓN: ", recaCheese, "$";
+                                        Mostrar << " DORITOS: ", cantDoritos, " | RECAUDACIÓN: ", recaDorito, "$";
+                                        Mostrar << " MANI: ", cantMani, " | RECAUDACIÓN: ", recaMani, "$";
+                                        Mostrar << " NUGGETS: ", cantNuggets, " | RECAUDACIÓN: ", recaNuggets, "$";
+                                        Mostrar << " TEQUEÑO: ", cantTequenos, " | RECAUDACIÓN: ", recaTequenos, "$";
+
+                                        Mostrar << " 4. INDIVIDUALES BEBIDAS: ";
+                                        Mostrar << " REFRESCO PEQUEÑO: ", cantRefrescoP, " | RECAUDACIÓN: ", recaRefrescoP, "$";
+                                        Mostrar << " REFRESCO MEDIANO: ", cantRefrescoM, " | RECAUDACIÓN: ", recaRefrescoM, "$";
+                                        Mostrar << " REFRESCO GRANDE: ", cantRefrescoG, " | RECAUDACIÓN: ", reRefrescoG, "$";
+
+                                        Mostrar << " 5. INDIVIDUALES DULCE: ";
+                                        Mostrar << " CHOCOLATE 0 AZÚCAR: ", cantChoco0, " | RECAUDACIÓN: ", recaChoco0, "$";
+                                        Mostrar << " CHOCOLATE SAVOY: ", cantChocoSavoy, " | RECAUDACIÓN: ", recaChocoSavoy, "$";
+                                        Mostrar << " FLIPS GRANDE: ", cantFlips, " | RECAUDACIÓN: ", recaFlips, "$";
+                                        Mostrar << " GOMITAS TRULULU: ", cantTrululu, " | RECAUDACIÓN: ", recaTrululu, "$";
+                                        Mostrar << " FLIPS NUTELLA: ", cantNutella, " | RECAUDACIÓN: ", recaNutella, "$";
+
+                                        Mostrar << " ----TOTALES---- ";
+                                        Mostrar << " SUB TOTAL TICKETS: ",recauTickets, "$";
+                                        Mostrar << " SUB TOTAL COMBOS: ",recauCombos, "$";
+                                        Mostrar << " SUB TOTAL INDIVIDUALES: ",recauProductos, "$";
+                                        Mostrar << " TOTAL: ", recauTSemana, "$";
+                            
+
+                                    Fin_Si
+                                    
+                                    Mostrar << "¿Deseas regresar al menú anterior?"; // Se pregunta al usuario si desea regresar.
+                                    Mostrar << "1 - Sí | 0 - No";
+                                    Leer >> volver;
+                                    Mientras (volver < 0 Or volver > 1) Hacer; // se valida que sea un dato valido.
+                                        Mostrar << "Opción inválida. Intente de nuevo.";
+                                        Leer >> volver;
+                                    Fin_Mientras
+                                Hasta (volver=0); // Solo se cierra el ciclo cuando regresar = 0.
+                                Fin_Repetir
+
+                            Fin_Si
+
+                        Hasta (volver = 0);
+                        Fin_Repetir
+                    Sino
+                        Si (opModulo = 2) Entonces;
+                            // -------------------
+                            //  MÓDULO INVENTARIO
+                            // -------------------
+                            Repetir
+                                Mostrar << "[MÓDULO INVENTARIO]";
+                                Mostrar << "Ingrese la contraseña de acceso:";
+                                Leer >> clave;
+
+                                Mientras (clave <> llaveInventario And intentar <> 0 ) Hacer;
+                                    Mostrar << "Contraseña Incorrecta. ¿Desea intentarlo nuevamente?";
+                                    Mostrar << "1 - Intentar de nuevo | 0 - Volver al menú anterior";
+                                    Leer >> intentar;
+                                    // Descartamos una opción inválida.
+                                    Mientras (intentar < 0 Or intentar > 1) Hacer;
+                                        Mostrar << "Opción inválida. Intente de nuevo.";
+                                        Leer >> intentar;
+                                    Fin_Mientras
+
+                                    // Si el trabajador quiere intentar de nuevo, se muestra esto.
+                                    Si (intentar = 1) Entonces;
+                                        Mostrar << "Ingrese la contraseña de acceso:";
+                                        Leer >> clave;
+                                    Sino
+                                        volver = 0;
+                                    Fin_Si
+                                Fin_Mientras
+
+                                Si (clave = llaveInventario) Entonces;
+                                    Mostrar << "CONTRASEÑA CORRECTA. CARGANDO MÓDULO...";
+                                    Mostrar << "---------------------------------------";
+                                    Repetir
+                                        Mostrar << "¿Desea generar e imprimir la SOLICITUD DE REPOSICIÓN DE STOCK?";
+                                        Mostrar << "1 - Sí | 0 - No";
+                                        Leer >> generarReporte;
+
+                                        // Se descartan opciones inválidas.
+                                        Mientras (generarReporte < 0 Or generarReporte > 1) Hacer; 
+                                            Mostrar << "Opción inválida. Intente de nuevo.";
+                                            Leer >> generarReporte;
+                                        Fin_Mientras
+
+                                        // Se genera el reporte si generarReporte = 1
+                                        Si (generarReporte = 1) Entonces;
+                                            
+                                            // Comprobamos que haya habido ventas del producto.
+                                            Si (invRefresco < CapacidadRefresco) Entonces;
+                                                // Vemos cuanto del producto queda para reponerlo parcial o totalmente.
+                                                Si (invRefresco = 0 ) Entonces;
+                                                    // Inventario vacío = Reposición Total
+                                                    repRefresco = CapacidadRefresco;
+                                                Sino
+                                                    // Inventario incompleto = Reposición parcial
+                                                    repRefresco = CapacidadRefresco - invRefresco;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invMaiz < CapacidadMaiz) Entonces;
+                                                Si (invMaiz = 0 ) Entonces;
+                                                    repMaiz = CapacidadMaiz;
+                                                Sino
+                                                    repMaiz = CapacidadMaiz - invMaiz;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invChoco0 < capChoco0) Entonces;
+                                                Si (invChoco0 = 0 ) Entonces;
+                                                    repChoco0 = capChoco0;
+                                                Sino
+                                                    repChoco0 = capChoco0 - invChoco0;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invMani < capMani) Entonces;
+                                                Si (invMani = 0 ) Entonces;
+                                                    repMani = capMani;
+                                                Sino
+                                                    repMani = capMani - invMani;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invDoritos < capDorito) Entonces;
+                                                Si (invDoritos = 0 ) Entonces;
+                                                    repDorito = capDorito;
+                                                Sino
+                                                    repDorito = capDorito - invDoritos;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invCheesetris < capCheesetris) Entonces;
+                                                Si (invCheesetris = 0) Entonces;
+                                                    repCheesetris = capCheesetris;
+                                                Sino
+                                                    repCheesetris = capCheesetris - invCheesetris;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invTequenos < capTeque) Entonces;
+                                                Si (invTequenos = 0) Entonces;
+                                                    repTeque = capTeque;
+                                                Sino
+                                                    repTeque = capTeque - invTequenos;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invNuggets < capNuggets) Entonces;
+                                                Si (invNuggets = 0) Entonces;
+                                                    repNuggets = capNuggets;
+                                                Sino
+                                                    repNuggets = capNuggets - invNuggets;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invFlips < capFlips) Entonces;
+                                                Si (invFlips = 0) Entonces;
+                                                    repFlips = capFlips;
+                                                Sino
+                                                    repFlips = capFlips - invFlips;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invChocoSavoy < capChocosavoy) Entonces;
+                                                Si (invChocoSavoy = 0) Entonces;
+                                                    repChocosavoy = capChocosavoy;
+                                                Sino
+                                                    repChocosavoy = capChocosavoy - invChocoSavoy;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invTrululu < capGomitas) Entonces;
+                                                Si (invTrululu = 0) Entonces;
+                                                    repGomitas = capGomitas;
+                                                Sino
+                                                    repGomitas = capGomitas - invTrululu;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            Si (invNutella < capNutella) Entonces;
+                                                Si (invNutella = 0) Entonces;
+                                                    repNutella = capNutella;
+                                                Sino
+                                                    repNutella = capNutella - invNutella;
+                                                Fin_Si
+                                            Fin_Si
+
+                                            // Se imprime la solicitud, la cual aprueba la gerencia.
+                                            Mostrar << " ---- SOLICITUD DE REPOSICION DE INVENTARIO ---- ";
+                                            Mostrar << "Stock Refresco",invRefresco,"|Reposicion Refresco:",repRefresco;
+                                            Mostrar << "Stock Maiz",invMaiz,"|Reposicion Maiz:",repMaiz;
+                                            Mostrar << "Stock Chocolate 0 azucar",invChoco0,"|Reposicion Chocolate 0 azucar:",repChoco0;
+                                            Mostrar << "Stock Mani",invMani,"|Reposicion Mani:",repMani;
+                                            Mostrar << "Stock Dorito",invDoritos,"|Reposicion Dorito:",repDorito;
+                                            Mostrar << "Stock Cheesetris",invCheesetris,"|Reposicion Cheesetris:",repCheesetris;
+                                            Mostrar << "Stock Tequeños",invTequenos,"|Reposicion Tequeños:",repTeque;
+                                            Mostrar << "Stock Nuggets",invNuggets,"|Reposicion Nuggets:",repNuggets;
+                                            Mostrar << "Stock Flips",invFlips,"|Reposicion Flips:",repFlips;
+                                            Mostrar << "Stock Chocolate Savoy",invChocoSavoy,"|Reposicion Choco Savoy:",repChocosavoy;
+                                            Mostrar << "Stock Gomitas Trululu",invTrululu,"|Reposicion Gomitas Trululu:",repGomitas;
+                                            Mostrar << "Stock Nutella",invNutella,"|Reposicion Nutella :",repNutella;
+
+                                        Fin_Si
+                                        // Se verifica si el usuario desea regresar 
+                                        Mostrar << "¿Deseas regresar al menú anterior?";
+                                        Mostrar << "1 - Sí | 0 - No";
+                                        Leer >> volver;
+                                        
+                                        // Se descarta una opción inválida.
+                                        Mientras (volver < 0 Or volver > 1) Hacer;
+                                            Mostrar << "Opción inválida. Intente de nuevo.";
+                                            Leer >> volver;
+                                        Fin_Mientras
+                                    Hasta (volver = 0);
+                                    Fin_Repetir
+                                Fin_Si
+
+                            Hasta (volver = 0);
+                            Fin_Repetir
+                        Sino
+                            Si (opModulo = 3) Entonces;
+                                // ---------------
+                                //  MÓDULO NÓMINA
+                                // ---------------
+                                Repetir
+                                    Mostrar << "[MÓDULO NÓMINA]";
+                                    Mostrar << "Ingrese la contraseña de acceso:";
+                                    Leer >> clave;
+
+                                    Mientras (clave <> llaveNomina And intentar <> 0 ) Hacer;
+                                        Mostrar << "Contraseña Incorrecta. ¿Desea intentarlo nuevamente?";
+                                        Mostrar << "1 - Intentar de nuevo | 0 - Volver al menú anterior";
+                                        Leer >> intentar;
+                                        // Descartamos una opción inválida.
+                                        Mientras (intentar < 0 Or intentar > 1) Hacer;
+                                            Mostrar << "Opción inválida. Intente de nuevo.";
+                                            Leer >> intentar;
+                                        Fin_Mientras
+
+                                        // Si el trabajador quiere intentar de nuevo, se muestra esto.
+                                        Si (intentar = 1) Entonces;
+                                            Mostrar << "Ingrese la contraseña de acceso:";
+                                            Leer >> clave;
+                                        Sino
+                                            volver = 0;
+                                        Fin_Si
+                                    Fin_Mientras
+
+                                    Si (clave = llaveNomina) Entonces;
+                                        Mostrar << "CONTRASEÑA CORRECTA. CARGANDO MÓDULO...";
+                                        Mostrar << "---------------------------------------";
+                                        //CODIGO DEL MODULO
+                                    Fin_Si
+                                Hasta (volver = 0);
+                                Fin_Repetir
+                            Sino
+                                trabajo = 0;
+                            Fin_Si
+                        Fin_Si
+                    Fin_Si
+
+                Hasta (trabajo = 0);
+                Fin_Repetir
+            Sino
+                // --------------------------------
+                // OPCIÓN MENU PRINCIPAL: 9) SALIR.
+                // --------------------------------
+                salir=0;
+            Fin_Si
+        Fin_Si
+
+    Hasta (salir=0);
+    Fin_Repetir
+Fin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

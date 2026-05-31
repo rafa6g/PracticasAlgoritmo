@@ -1,0 +1,100 @@
+
+Algoritmo Gerencia
+
+Inicio
+
+/*
+Modulo: GERENCIA
+Desarrollador: Eisvel Noguera. 
+supervisor: Rafael Garcia.
+*/
+
+var generarReporte, regresar: Entero;
+var tikelunes,tikemartes,tikemiercoles,tikejueves,tikeviernes,tikesabado: Entero
+var clave, llave, salir = 1: Entero; 
+llave = 12345678;
+
+
+    Mostrar << "POR FAVOR INGRESE SU CLAVE";
+    Leer >> clave;
+    Mientras (clave <> llave or salir <> 0 ) Hacer;
+        Mostrar << "CLAVE INCORRECTA, DESEA CONTINUAR ";
+        Mostrar << "PRESIONE (1) CONTINUAR | (0) PARA SALIR";
+        leer  salir;
+        Mientras (salir < 0 or salir > 1) Hacer;
+            Mostrar << " POR FAVOR INGRESE UNA OPCION VALIDA";
+        Fin_Mientras
+    Fin_Mientras
+        
+    
+    Repetir //Aqui se repite todo este codigo hasta que se ponga 0 (que es igual a salir).
+        Mostrar << "¿Desea imprimir el REPORTE DE VENTAS y realizar el CIERRE DE CAJA?";
+        Mostrar << "1 - Sí | 0 - No"; // Chequea que el usuario desee hacer cierre de caja.
+            Mientras (generarReporte < 0 Or generarReporte > 1) Hacer; //Aqui se valida que este dentro del rango.
+                Mostrar << "Opción inválida. Intente de nuevo.";
+                Leer >> generarReporte;
+            Fin_Mientras
+
+        Si (generarReporte = 1) Entonces; //se genera el reporte si es = 1.
+            
+            Mostrar << " ----REPORTE DE VENTAS---- ";  
+
+            Mostrar << " 1. TICKETS"; // se calcula cuantas tickets se vendieron en la semana.
+            Mostrar << " LUNES: ", tikelunes, " | RECUADACION: ",recalunes;
+            Mostrar << " MARTES: ", tikemartes, " | RECUADACION: ",recamartes;
+            Mostrar << " MIERCOLES: ", tikemiercoles, " | RECUADACION: ",recamiercoles;
+            Mostrar << " JUEVES: ", tikejueves, " | RECUADACION: ",recajueves;
+            Mostrar << " VIERNES: ", tikeviernes, " | RECUADACION: ",recaviernes;
+            Mostrar << " SABADO: ", tikesabado, " | RECUADACION: ",recasabado;
+
+
+            Mostrar << " 2. COMBOS"; 
+            Mostrar << " INFANTIL: ", infantivendido, " | RECAUDACION: ",recainfantil;
+            Mostrar << " INDIVIDUAL: ", indivendido, " | RECAUDACION: ", recaindi;
+            Mostrar << " PAREJA: ", parvendido, " | RECAUDACION: ", recapar;
+            Mostrar << " FAMILIAR: ", famiVendido, " | RECAUDACION: ", recafami;
+
+
+            Mostrar << " 3. INDIVIDUALES SALADO: ";
+            Mostrar << " COTUFA MEDIANA: ", mediavendido, " | RECAUDACION: ", recamedia;
+            Mostrar << " COTUFA GRANDE: ", grandevendido, " | RECAUDACION: ", recagrande;
+            Mostrar << " COTUFA EXTRA GRANDE: ", extravendido, " | RECAUDACION: ", recaextra;
+            Mostrar << " CHEESE TRIS: ", cheesevendido, " | RECAUDACION: ", recacheese;
+            Mostrar << " DORITOS: ", doritovendido, " | RECAUDACION: ", recadorito;
+            Mostrar << " MANI: ", manitovendido, " | RECAUDACION: ", recamani;
+            Mostrar << " NUGGETS: ", nuggetsvendido, " | RECAUDACION: ", recanuggets;
+            Mostrar << " TEQUEÑO: ", tequevendido, " | RECAUDACION: ", recateque;
+
+            Mostrar << " 4. INDIVIDUALES BEBIDAS: ";
+            Mostrar << " REFRESCO PEQUEÑO: ", repequevendido, " | RECAUDACION: ", recarepeque;
+            Mostrar << " REFRESCO MEDIANO: ", remediavendido, " | RECAUDACION: ", recaremedia;
+            Mostrar << " REFRESCO GRANDE: ", regranvendido, " | RECAUDACION: ", recagran;
+
+            Mostrar << " 5. INDIVIDUALES DULCE: ";
+            Mostrar << " CHOCOLATE 0 AZÚCAR: ", choco0vendido, " | RECAUDACION: ", recachoco0;
+            Mostrar << " CHOCOLATE SAVOY: ", chocovendido, " | RECAUDACION: ", recachoco;
+            Mostrar << " FLIPS GRANDE: ", flipsvendido, " | RECAUDACION: ", recaflips;
+            Mostrar << " GOMITAS TRULULU: ", gomitavendido, " | RECAUDACION: ", recagomita;
+            Mostrar << " FLIPS NUTELLA: ", nutellavendido, " | RECAUDACION: ", recanutella;
+
+
+
+            Mostrar << " ----TOTALES---- ";
+            Mostrar << " SUB TOTAL TICKETS: ",pTotalTickets;
+            Mostrar << " SUB TOTAL COMBOS: ",pTotalCombos;
+            Mostrar << " SUB TOTAL INDIVIDUALES: ",pTotalProductos;
+            Mostrar << " TOTAL: ", totalGeneral;
+ 
+
+        Fin_Si
+        
+        Mostrar << "¿Deseas regresar al menú anterior?"; // Se pregunta al usuario si desea regresar.
+        Mostrar << "1 - Sí | 0 - No";
+        Leer >> regresar;
+        Mientras (regresar < 0 Or regresar > 1) Hacer; // se valida que sea un dato valido.
+            Mostrar << "Opción inválida. Intente de nuevo.";
+            Leer >> regresar;
+        Fin_Mientras
+        Hasta (regresar=0) // Solo se cierra el ciclo cuando regresar = 0.
+    Fin_Repetir
+Fin

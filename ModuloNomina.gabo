@@ -1,0 +1,145 @@
+Algoritmo Ejemplo_Reposicion
+/*
+Modulo: Nomina.
+Desarrollador: Engel Nieves.
+Supervisor: Rafael Garcia.
+*/
+Inicio
+    Var calcularNomina, regresar, Fecha, Categoria, Horas, Horaext = 0: Entero;
+    Var Nombre: Cadena;
+    Var SalarioH, Recargoext, Salario_Bruto, PorcentajeHext, Cesta_Ticket = 0, Ivss, Faov, Rpe: Real;
+    
+    Repetir
+        Mostrar << "¿Desea generar CALCULAR LA NOMINA?";
+        Mostrar << "1 - Sí | 0 - No";
+        Leer >> calcularNomina;
+        Mientras (calcularNomina < 0 Or calcularNomina > 1) Hacer;
+            Mostrar << "Opción inválida. Intente de nuevo.";
+            Leer >> calcularNomina;
+        Fin_Mientras
+
+        Si (calcularNomina = 1) Entonces;
+            Repetir
+                Mostrar<<"Ingrese la fecha de pago:...";
+                Mostrar<<"1. Mitad de Mes, 2. Fin de Mes";
+                Leer>>Fecha;
+
+                Mientras (Fecha < 1 Or Fecha > 2) Hacer;
+                    Mostrar<<"Error: Opcion Invalida";
+                    Leer>>Fecha;
+                Fin_Mientras
+
+                Mostrar<<"Ingrese su nombre completo:...";
+                Leer>>Nombre;
+                Mostrar<<"Ingrese su Categoria:...";
+                Mostrar<<"1. Gerencia, 2. Compras, 3. Nomina";
+                Mostrar<<"4. Administracion, 5. Contabilidad, 6. Supervision";
+                Mostrar<<"7. Atencion al publico, 8. Mantenimiento";
+                Leer>>Categoria;
+
+                Mientras (Categoria < 1 Or Categoria > 8) Hacer;
+                    Mostrar<<"Error, la categoria ingresada es invalida";
+                    Leer>>Categoria;
+                Fin_Mientras
+
+                Mostrar<<"Ingrese cuantas horas trabajo:...";
+
+                Repetir
+                    Leer>>Horas;
+                    Si (Horas < 1 Or Horas > 360) Entonces;
+                        Mostrar<<"Error: El dato es invalido";
+                    Fin_Si
+                    Hasta(Horas >= 1 And Horas <= 360);
+                Fin_Repetir
+
+                Si (Categoria = 1) Entonces;
+                    SalarioH = 10;
+                    PorcentajeHext = 0.65;
+                Sino
+                    Si (Categoria >= 2 And Categoria <=5) Entonces;
+                        SalarioH = 4;
+                        PorcentajeHext = 0.60;
+                    Sino
+                        Si (Categoria = 6) Entonces;
+                            SalarioH = 3;
+                            PorcentajeHext = 0.60;
+                        Sino
+                            SalarioH = 2.5;
+                            PorcentajeHext = 0.50;
+                        Fin_Si
+                    Fin_Si
+                Fin_Si
+                En_Caso (Categoria >= 1 And Categoria <= 8) Sea;
+                    Caso (Categoria = 1);
+                        Departamento = "Gerencia";
+                    Caso (Categoria = 2);
+                        Departamento = "Compras";
+                    Caso (Categoria = 3);
+                        Departamento = "Nomina";
+                    Caso (Categoria = 4);
+                        Departamento = "Administracion";
+                    Caso (Categoria = 5);
+                        Departamento = "Contabilidad";
+                    Caso (Categoria = 6);
+                        Departamento = "Supervision";
+                    Caso (Categoria = 7);
+                        Departamento = "Atencion al publico";
+                    Otro_Caso
+                        Departamento = "Mantenimiento";
+                Fin_Caso
+
+
+                Si (Horas > 96) Entonces;
+                    Horaext = Horas - 96;
+                    Horas = 96;
+                Fin_Si
+
+                Salario_Bruto = Horas * SalarioH;
+                Recargoext = Horaext * (SalarioH * PorcentajeHext);
+                Ivss = Salario_Bruto * 0.04;
+                Faov = Salario_Bruto * 0.01;
+                Rpe = Salario_Bruto * 0.005;
+
+                Si (Fecha = 2) Entonces;
+                    Cesta_Ticket = 100;
+                Fin_Si
+
+                Salario_Neto = (Salario_Bruto + Recargoext + Cesta_Ticket) - (Ivss + Faov + Rpe);
+                Mostrar<<"RECIBO DE PAGO:";
+                Mostrar<<"Nombre: ", Nombre, " | Departamento: ", Departamento;
+                Mostrar<<"1. ASIGNACIONES";
+                Mostrar<<"Horas trabajadas: ", Horas, " | Monto: ", Salario_Bruto, "$";
+                Si (Horaext > 0) Entonces;
+                    Mostrar<<"Horas Extras: ", Horaext, " | Monto: ", Recargoext, "$";
+                Fin_Si
+                Si (Cesta_Ticket > 0) Entonces;
+                    Mostrar<<"Cesta ticket: ", Cesta_Ticket, "$";
+                Fin_Si
+                Mostrar<<"2. RETENCIONES";
+                Mostrar<<"IVSS (4%): ", Ivss, "$";
+                Mostrar<<"FAOV (1%): ", Faov, "$";
+                Mostrar<<"RPE (0.5%): ", Rpe, "$";
+                Mostrar<<"3. TOTAL";
+                Mostrar<<"Salario Neto: ", Salario_Neto, "$";
+
+                Mostrar<<"Desea Continuar o Salir: ";
+                Mostrar<<"0. Continuar, 1. Salir";
+                Leer>>regresar;
+                Mientras (regresar < 0 Or regresar > 1) Hacer;
+                    Mostrar << "Opción inválida. Intente de nuevo.";
+                    Leer >> regresar;
+                Fin_Mientras
+                Hasta (regresar = 1);
+            Fin_Repetir
+        Fin_Si
+        
+        Mostrar << "¿Deseas regresar al menú anterior?";
+        Mostrar << "1 - Sí | 0 - No";
+        Leer >> regresar;
+        Mientras (regresar < 0 Or regresar > 1) Hacer;
+            Mostrar << "Opción inválida. Intente de nuevo.";
+            Leer >> regresar;
+        Fin_Mientras
+        Hasta (regresar=0)
+    Fin_Repetir
+Fin
